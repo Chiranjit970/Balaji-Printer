@@ -1,61 +1,66 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Button from './Button';
 import { colors, spacing, typography } from '../../constants';
 
 interface EmptyStateProps {
-  /** Icon name from Ionicons */
-  icon?: keyof typeof Ionicons.glyphMap;
-  /** Main title */
+  icon?: string;
   title: string;
-  /** Descriptive message */
-  message?: string;
+  message: string;
+  actionText?: string;
+  onActionPress?: () => void;
 }
 
-/**
- * Placeholder component for empty data states.
- * Used when lists are empty, no results found, etc.
- */
-export default function EmptyState({
+export const EmptyState: React.FC<EmptyStateProps> = ({
   icon = 'document-text-outline',
   title,
   message,
-}: EmptyStateProps) {
+  actionText,
+  onActionPress,
+}) => {
   return (
-    <View style={styles.container} accessibilityRole="text">
-      <Ionicons
-        name={icon}
-        size={48}
-        color={colors.textMuted}
-        style={styles.icon}
-      />
+    <View style={styles.container}>
+      <Ionicons name={icon as any} size={80} color={colors.textMuted} />
+      
       <Text style={styles.title}>{title}</Text>
-      {message ? <Text style={styles.message}>{message}</Text> : null}
+      <Text style={styles.message}>{message}</Text>
+      
+      {actionText && onActionPress && (
+        <View style={styles.button}>
+          <Button
+            title={actionText}
+            onPress={onActionPress}
+            variant="primary"
+          />
+        </View>
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: spacing.xl,
-  },
-  icon: {
-    marginBottom: spacing.md,
-    opacity: 0.6,
+    backgroundColor: colors.white,
   },
   title: {
-    ...typography.h2,
-    color: colors.textPrimary,
+    ...typography.h1,
+    color: colors.black,
     textAlign: 'center',
-    marginBottom: spacing.xs,
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
   },
   message: {
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 20,
+    marginBottom: spacing.lg,
+  },
+  button: {
+    minWidth: 200,
   },
 });

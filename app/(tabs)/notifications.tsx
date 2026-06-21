@@ -4,13 +4,13 @@ import { EmptyState } from '../../src/components/common/EmptyState';
 import { colors } from '../../src/constants';
 import { StyleSheet } from 'react-native';
 
-export default function StoreScreen() {
+export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <EmptyState
-        icon="cart-outline"
-        title="Store Coming Soon"
-        message="Browse and purchase printing supplies, paper, and accessories"
+        icon="notifications-off-outline"
+        title="No Notifications"
+        message="We'll notify you when there are updates about your orders or new offers"
       />
     </SafeAreaView>
   );

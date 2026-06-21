@@ -1,43 +1,39 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography } from '../../src/constants';
+import { useNotificationCount } from '../../src/hooks/useNotificationCount';
+import { View, StyleSheet } from 'react-native';
+import { NotificationBadge } from '../../src/components/navigation/NotificationBadge';
 
-/**
- * Bottom tab navigator for authenticated users.
- * 4 tabs: Print (default), Store, Orders, Profile.
- */
-export default function TabsLayout() {
+export default function TabLayout() {
+  const { data: notificationData } = useNotificationCount();
+  const badgeCount = notificationData?.unread || 0;
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: colors.blue,
-        tabBarInactiveTintColor: colors.black,
-        tabBarLabelStyle: {
-          fontFamily: typography.caption.fontFamily,
-          fontSize: typography.caption.fontSize,
-        },
+        tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
           backgroundColor: colors.white,
           borderTopColor: colors.border,
-          borderTopWidth: 1,
           height: 60,
           paddingBottom: 8,
-          paddingTop: 4,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'Inter-Medium',
+          fontSize: 12,
         },
       }}
     >
       <Tabs.Screen
-        name="print"
+        name="index"
         options={{
-          title: 'Print',
+          title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'print' : 'print-outline'}
-              size={24}
-              color={color}
-              accessibilityLabel="Print tab"
-            />
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
           ),
         }}
       />
@@ -46,12 +42,7 @@ export default function TabsLayout() {
         options={{
           title: 'Store',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'cart' : 'cart-outline'}
-              size={24}
-              color={color}
-              accessibilityLabel="Store tab"
-            />
+            <Ionicons name={focused ? 'cart' : 'cart-outline'} size={24} color={color} />
           ),
         }}
       />
@@ -60,12 +51,21 @@ export default function TabsLayout() {
         options={{
           title: 'Orders',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'list' : 'list-outline'}
-              size={24}
-              color={color}
-              accessibilityLabel="Orders tab"
-            />
+            <Ionicons name={focused ? 'receipt' : 'receipt-outline'} size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Updates',
+          tabBarIcon: ({ color, focused }) => (
+            <View style={styles.iconContainer}>
+              <Ionicons name={focused ? 'notifications' : 'notifications-outline'} size={24} color={color} />
+              {badgeCount > 0 && (
+                <NotificationBadge count={badgeCount} position="top-right" size="small" />
+              )}
+            </View>
           ),
         }}
       />
@@ -74,15 +74,16 @@ export default function TabsLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'person' : 'person-outline'}
-              size={24}
-              color={color}
-              accessibilityLabel="Profile tab"
-            />
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    position: 'relative',
+  },
+});

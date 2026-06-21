@@ -1,36 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import SafeContainer from '../../src/components/layouts/SafeContainer';
-import { typography, colors } from '../../src/constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { EmptyState } from '../../src/components/common/EmptyState';
+import { colors } from '../../src/constants';
+import { StyleSheet } from 'react-native';
 
-/**
- * Orders screen placeholder (Phase 6).
- */
 export default function OrdersScreen() {
+  const router = useRouter();
+  
   return (
-    <SafeContainer>
-      <View style={styles.container}>
-        <Text style={styles.title}>Orders Screen</Text>
-        <Text style={styles.subtitle}>Phase 6 – Coming Soon</Text>
-      </View>
-    </SafeContainer>
+    <SafeAreaView style={styles.container}>
+      <EmptyState
+        icon="receipt-outline"
+        title="No Orders Yet"
+        message="Your order history will appear here once you place your first order"
+        actionText="Start Printing"
+        onActionPress={() => router.push('/(tabs)/index')}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: colors.white,
-  },
-  title: {
-    ...typography.h1,
-    color: colors.black,
-  },
-  subtitle: {
-    ...typography.body,
-    color: colors.textMuted,
-    marginTop: 8,
   },
 });

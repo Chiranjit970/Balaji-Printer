@@ -53,6 +53,8 @@ export default function HomeScreen() {
       router.push('/(tabs)/store');
     } else if (route === '/(tabs)/orders') {
       router.push('/(tabs)/orders');
+    } else if (route === '/(tabs)/print' || route.includes('print')) {
+      router.push('/(printing)/upload');
     } else {
       Alert.alert(
         'Coming Soon',
@@ -63,11 +65,7 @@ export default function HomeScreen() {
   };
   
   const handlePromoCTAPress = () => {
-    Alert.alert(
-      'Print Upload',
-      'Upload and print feature coming soon!',
-      [{ text: 'OK' }]
-    );
+    router.push('/(printing)/upload');
   };
   
   // Loading state

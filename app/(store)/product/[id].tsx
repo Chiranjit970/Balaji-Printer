@@ -90,8 +90,7 @@ export default function ProductDetailScreen() {
       quantity,
       image: product.images?.[0],
     });
-    setToastMessage('Redirecting to checkout... (Checkout coming in Phase 5)');
-    setToastVisible(true);
+    router.push('/(checkout)/cart');
   };
 
   if (isLoading) {
@@ -131,8 +130,7 @@ export default function ProductDetailScreen() {
         cartCount={cartCount}
         notificationCount={notificationCount}
         onCartPress={() => {
-          setToastMessage('Opening cart... (Checkout details in Phase 5)');
-          setToastVisible(true);
+          router.push('/(checkout)/cart');
         }}
       />
 

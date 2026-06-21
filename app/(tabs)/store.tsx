@@ -105,7 +105,7 @@ export default function StoreScreen() {
         <StoreHeader
           cartCount={cartCount}
           notificationCount={notificationCount}
-          onCartPress={() => router.push('/(tabs)/orders')} // fallback or cart tab
+          onCartPress={() => router.push('/(checkout)/cart')}
           onNotificationPress={() => router.push('/(tabs)/notifications')}
         />
         <StoreSkeleton />
@@ -119,7 +119,7 @@ export default function StoreScreen() {
         <StoreHeader
           cartCount={cartCount}
           notificationCount={notificationCount}
-          onCartPress={() => router.push('/(tabs)/orders')}
+          onCartPress={() => router.push('/(checkout)/cart')}
           onNotificationPress={() => router.push('/(tabs)/notifications')}
         />
         <EmptyState
@@ -145,8 +145,7 @@ export default function StoreScreen() {
         cartCount={cartCount}
         notificationCount={notificationCount}
         onCartPress={() => {
-          setToastMessage('Opening cart... (Checkout details in Phase 5)');
-          setToastVisible(true);
+          router.push('/(checkout)/cart');
         }}
         onNotificationPress={() => router.push('/(tabs)/notifications')}
       />

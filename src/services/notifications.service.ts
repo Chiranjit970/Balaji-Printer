@@ -1,3 +1,5 @@
+import { ProfileService } from './profile.service';
+
 export interface NotificationCount {
   unread: number;
 }
@@ -5,11 +7,10 @@ export interface NotificationCount {
 export const NotificationsService = {
   /**
    * Get unread notification count
+   * Delegates to ProfileService for a single source of truth
    */
   async getUnreadCount(): Promise<NotificationCount> {
-    await new Promise(resolve => setTimeout(resolve, 400));
-    
-    // Mock: no notifications for new users
-    return { unread: 0 };
+    const count = await ProfileService.getUnreadCount();
+    return { unread: count };
   },
 };

@@ -8,6 +8,14 @@ export type OrderStatus =
   | 'delivered'
   | 'cancelled';
 
+export type OrderStatusFilter =
+  | 'all'
+  | 'placed'
+  | 'processing'
+  | 'dispatched'
+  | 'delivered'
+  | 'cancelled';
+
 export type PaymentStatus =
   | 'pending'
   | 'paid'
@@ -30,6 +38,27 @@ export interface OrderPricing {
   currency: string;
 }
 
+export interface OrderTimelineEvent {
+  status: OrderStatus;
+  label: string;
+  timestamp: string | null;    // null = not yet reached
+  isCompleted: boolean;
+  isCurrent: boolean;
+}
+
+export interface OrderSearchParams {
+  query?: string;               // search by order ID
+  statusFilter?: OrderStatusFilter;
+  page?: number;
+  limit?: number;
+}
+
+export interface OrdersListResponse {
+  orders: Order[];
+  total: number;
+  hasMore: boolean;
+}
+
 export interface Order {
   id: string;
   displayOrderId: string;    // "BP12345678" format
@@ -41,9 +70,12 @@ export interface Order {
   paymentMethod?: PaymentMethod;
   razorpayOrderId?: string;   // future
   razorpayPaymentId?: string; // future
+  timeline: OrderTimelineEvent[];
+  estimatedDelivery?: string;   // ISO date string
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface CreateOrderRequest {
   items: CartItem[];

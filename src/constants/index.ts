@@ -5,4 +5,5 @@ export { config } from './config';
 export { authColors, authConfig } from './auth.constants';
 export * from './store.constants';
 export * from './checkout.constants';
-
+export * from './orders.constants';
+export * from './profile.constants';

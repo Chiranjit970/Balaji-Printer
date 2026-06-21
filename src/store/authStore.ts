@@ -9,6 +9,9 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
 
+  // Redirect handling
+  redirectAfterAuth: string | null;
+
   // Loading states
   isInitializing: boolean; // App bootstrap
   isLoading: boolean; // Auth operations (login/logout)
@@ -21,15 +24,19 @@ interface AuthState {
   login: (token: string, user: User) => Promise<void>;
   logout: () => Promise<void>;
   setUser: (user: User | null) => void;
+  setRedirectAfterAuth: (path: string | null) => void;
+  updateUserName: (name: string) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   token: null,
   user: null,
   isAuthenticated: false,
+  redirectAfterAuth: null,
   isInitializing: true,
   isLoading: false,
   initError: null,
+  setRedirectAfterAuth: (path) => set({ redirectAfterAuth: path }),
 
   initialize: async () => {
     try {
@@ -78,4 +85,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   setUser: (user: User | null) => set({ user }),
+
+  updateUserName: (name: string) =>
+    set((state) => ({
+      user: state.user ? { ...state.user, name } : null,
+    })),
 }));
+

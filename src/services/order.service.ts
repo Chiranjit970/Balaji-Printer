@@ -76,6 +76,36 @@ export const OrderService = {
       paymentStatus: 'pending',
       paymentMethod: request.paymentMethod,
       razorpayOrderId: mockRazorpayOrderId,
+      timeline: [
+        {
+          status: 'placed',
+          label: 'Order Placed',
+          timestamp: new Date().toISOString(),
+          isCompleted: true,
+          isCurrent: true,
+        },
+        {
+          status: 'processing',
+          label: 'Processing',
+          timestamp: null,
+          isCompleted: false,
+          isCurrent: false,
+        },
+        {
+          status: 'dispatched',
+          label: 'Dispatched',
+          timestamp: null,
+          isCompleted: false,
+          isCurrent: false,
+        },
+        {
+          status: 'delivered',
+          label: 'Delivered',
+          timestamp: null,
+          isCompleted: false,
+          isCurrent: false,
+        },
+      ],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

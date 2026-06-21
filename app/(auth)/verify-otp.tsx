@@ -24,6 +24,7 @@ import AppLoader from '../../src/components/common/AppLoader';
 import { useVerifyOTP } from '../../src/hooks/useVerifyOtp';
 import { useResendOTP } from '../../src/hooks/useResendOtp';
 import { useOTPStore } from '../../src/store/otpStore';
+import { useAuthStore } from '../../src/store/authStore';
 import { validators } from '../../src/utils/validation';
 import { formatPhoneDisplay } from '../../src/utils/formatters';
 import { colors, spacing, typography } from '../../src/constants';
@@ -83,8 +84,13 @@ export default function VerifyOTPScreen() {
       { phone: phone!, otp: finalOtp },
       {
         onSuccess: () => {
-          // Navigating to print tab explicitly, though AuthGate handles some of this
-          router.replace('/(tabs)/print');
+          const redirectPath = useAuthStore.getState().redirectAfterAuth;
+          if (redirectPath) {
+            useAuthStore.getState().setRedirectAfterAuth(null);
+            router.replace(redirectPath as any);
+          } else {
+            router.replace('/(tabs)/print');
+          }
         },
         onError: (error) => {
           setOTPError(error.message);

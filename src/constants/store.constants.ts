@@ -1,0 +1,221 @@
+import { colors } from './colors';
+import { Category, Product, PromoBanner } from '../types/store.types';
+
+// ─── Categories ──────────────────────────────────────────────────────
+export const MOCK_CATEGORIES: Category[] = [
+  {
+    id: 'all',
+    name: 'All Products',
+    icon: 'apps-outline',
+    color: '#EFF6FF',
+    productCount: 48,
+  },
+  {
+    id: 'visiting-cards',
+    name: 'Visiting Cards',
+    icon: 'card-outline',
+    color: '#EFF6FF',
+    productCount: 12,
+  },
+  {
+    id: 'banners',
+    name: 'Banners',
+    icon: 'megaphone-outline',
+    color: '#F0FDF4',
+    productCount: 8,
+  },
+  {
+    id: 'flyers',
+    name: 'Flyers',
+    icon: 'document-text-outline',
+    color: '#FFF7ED',
+    productCount: 10,
+  },
+  {
+    id: 'books',
+    name: 'Books',
+    icon: 'book-outline',
+    color: '#FDF4FF',
+    productCount: 6,
+  },
+  {
+    id: 'stationery',
+    name: 'Stationery',
+    icon: 'pencil-outline',
+    color: '#FFF7ED',
+    productCount: 9,
+  },
+  {
+    id: 'accessories',
+    name: 'Accessories',
+    icon: 'construct-outline',
+    color: '#F0FDF4',
+    productCount: 3,
+  },
+];
+
+// ─── Mock Products ────────────────────────────────────────────────────
+export const MOCK_PRODUCTS: Product[] = [
+  {
+    id: 'prod-001',
+    name: 'Premium Visiting Card',
+    description: 'High quality matte finish visiting cards. Perfect for business and personal use. Printed on 350 GSM premium card stock with sharp, vibrant colors.',
+    shortDescription: 'Matte Finish • 350 GSM',
+    price: 249,
+    originalPrice: 349,
+    currency: 'INR',
+    categoryId: 'visiting-cards',
+    categoryName: 'Visiting Cards',
+    images: [
+      'https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=600',
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
+    ],
+    rating: 4.6,
+    reviewCount: 128,
+    features: [
+      { icon: 'checkmark-circle-outline', label: 'Matte Finish', description: 'Premium look' },
+      { icon: 'layers-outline', label: '350 GSM', description: 'Thick & durable' },
+      { icon: 'color-palette-outline', label: 'Full Color', description: 'Vibrant printing' },
+    ],
+    specifications: {
+      'Paper Stock': '350 GSM Art Card',
+      'Finish': 'Matte Lamination',
+      'Size': '90mm × 55mm',
+      'Quantity': '100 cards',
+      'Printing': 'Both sides',
+    },
+    inStock: true,
+    stockStatus: 'in_stock',
+    stockLabel: 'In Stock · Ready to print',
+    isFeatured: true,
+    isBestSeller: true,
+    tags: ['business', 'premium', 'matte'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'prod-002',
+    name: 'A4 Flyer',
+    description: 'High quality glossy flyer for promotions and events. Vibrant print on glossy paper.',
+    shortDescription: 'Glossy Finish • 170 GSM',
+    price: 199,
+    currency: 'INR',
+    categoryId: 'flyers',
+    categoryName: 'Flyers',
+    images: [
+      'https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?w=600',
+    ],
+    rating: 4.7,
+    reviewCount: 96,
+    features: [
+      { icon: 'star-outline', label: 'Glossy Finish', description: 'Vibrant colors' },
+      { icon: 'layers-outline', label: '170 GSM', description: 'Standard weight' },
+      { icon: 'resize-outline', label: 'A4 Size', description: '210 × 297 mm' },
+    ],
+    specifications: {
+      'Paper': '170 GSM Gloss Art',
+      'Finish': 'Glossy',
+      'Size': 'A4 (210 × 297 mm)',
+      'Printing': 'Single side',
+    },
+    inStock: true,
+    stockStatus: 'in_stock',
+    stockLabel: 'In Stock',
+    isFeatured: true,
+    isBestSeller: true,
+    tags: ['flyer', 'promotion', 'glossy'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'prod-003',
+    name: 'Roll-up Banner',
+    description: 'Premium quality roll-up banner for exhibitions, shops, and events.',
+    shortDescription: 'Premium quality banner',
+    price: 699,
+    currency: 'INR',
+    categoryId: 'banners',
+    categoryName: 'Banners',
+    images: [
+      'https://images.unsplash.com/photo-1613235788016-8a67c4e03f11?w=600',
+    ],
+    rating: 4.5,
+    reviewCount: 72,
+    features: [
+      { icon: 'resize-outline', label: 'Large Format', description: '85 × 200 cm' },
+      { icon: 'construct-outline', label: 'With Stand', description: 'Easy setup' },
+      { icon: 'color-palette-outline', label: 'Full Color', description: 'Vivid print' },
+    ],
+    specifications: {
+      'Size': '85cm × 200cm',
+      'Material': 'Premium vinyl',
+      'Stand': 'Aluminum roll-up',
+      'Carry bag': 'Included',
+    },
+    inStock: true,
+    stockStatus: 'low_stock',
+    stockLabel: 'Only 3 left',
+    isFeatured: false,
+    isBestSeller: true,
+    tags: ['banner', 'exhibition', 'rollup'],
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'prod-004',
+    name: 'Spiral Notebook',
+    description: 'A5 spiral bound notebook with 80 ruled pages. Perfect for office and students.',
+    shortDescription: 'A5, 80 pages',
+    price: 129,
+    currency: 'INR',
+    categoryId: 'stationery',
+    categoryName: 'Stationery',
+    images: [
+      'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600',
+    ],
+    rating: 4.4,
+    reviewCount: 58,
+    features: [
+      { icon: 'book-outline', label: '80 Pages', description: 'Ruled paper' },
+      { icon: 'resize-outline', label: 'A5 Size', description: 'Compact & handy' },
+      { icon: 'git-commit-outline', label: 'Spiral Bound', description: 'Lay flat' },
+    ],
+    specifications: {
+      'Pages': '80',
+      'Size': 'A5 (148 × 210 mm)',
+      'Binding': 'Spiral',
+      'Ruling': 'Single line',
+    },
+    inStock: true,
+    stockStatus: 'in_stock',
+    stockLabel: 'In Stock',
+    isFeatured: false,
+    isBestSeller: true,
+    tags: ['notebook', 'stationery', 'spiral'],
+    createdAt: new Date().toISOString(),
+  },
+];
+
+// ─── Promotional Banners ─────────────────────────────────────────────
+export const PROMO_BANNERS: PromoBanner[] = [
+  {
+    id: 'promo-001',
+    title: 'Bulk Printing Offers',
+    subtitle: 'Order 500+ cards and save 30%',
+    ctaText: 'View Offers',
+    backgroundColor: colors.blueLight,
+  },
+  {
+    id: 'promo-002',
+    title: 'Business Packages',
+    subtitle: 'Cards + Flyers + Banner combo',
+    ctaText: 'See Packages',
+    backgroundColor: '#F0FDF4',
+  },
+];
+
+// ─── Sort Options ────────────────────────────────────────────────────
+export const SORT_OPTIONS: Array<{ id: string; label: string }> = [
+  { id: 'relevance', label: 'Relevance' },
+  { id: 'price_asc', label: 'Price: Low to High' },
+  { id: 'price_desc', label: 'Price: High to Low' },
+  { id: 'popularity', label: 'Popularity' },
+  { id: 'newest', label: 'Newest First' },
+];

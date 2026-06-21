@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFonts } from '../src/hooks/useFonts';
 
 // Prevent auto-hide of native splash screen
@@ -33,20 +34,23 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
-        <StatusBar style="dark" />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: 'fade',
-          }}
-        >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-        </Stack>
-      </SafeAreaProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <StatusBar style="dark" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: 'fade',
+            }}
+          >
+            <Stack.Screen name="index" />
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="(store)" />
+          </Stack>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

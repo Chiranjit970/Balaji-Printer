@@ -6,6 +6,7 @@ import { colors } from '../../src/constants/colors';
 import { typography } from '../../src/constants/typography';
 import { WizardLayout } from '../../src/components/features/printing/WizardLayout';
 import { usePrintStore } from '../../src/store/printStore';
+import { useCartStore } from '../../src/store/cartStore';
 
 interface PriceRowProps {
   label: string;
@@ -32,19 +33,30 @@ const PriceRow = ({ label, value, isTotal, isDiscount }: PriceRowProps) => (
 export default function ReviewScreen() {
   const router = useRouter();
   const { job, resetJob } = usePrintStore();
+  const addPrintJob = useCartStore((state) => state.addPrintJob);
   const { file, options, price } = job;
   
   const [isAdding, setIsAdding] = useState(false);
 
   const handleAddToCart = () => {
     setIsAdding(true);
-    // Simulate API call to add to cart
     setTimeout(() => {
+      addPrintJob({
+        fileName: file?.name || 'Unknown File',
+        pageCount: file?.pageCount || 1,
+        copies: options.copies,
+        options: {
+          color: options.color,
+          paperSize: options.paperSize,
+          sides: options.sides,
+          binding: options.binding,
+        },
+        price: price.total,
+      });
       setIsAdding(false);
       resetJob(); // Clear current job
-      // Route back to tabs, perhaps directly to the cart if we had one
       router.replace('/(tabs)/');
-    }, 1500);
+    }, 1000);
   };
 
   const handleModify = () => {

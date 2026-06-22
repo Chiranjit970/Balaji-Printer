@@ -38,6 +38,17 @@
   --color-danger-bg: #FEE2E2;
   --color-danger-border: #FECACA;
 
+  /* Dashboard specific accents */
+  --color-sidebar-bg: #0B1120;
+  --color-orange: #F59E0B;
+  --color-orange-light: #FEF3C7;
+  --color-green: #10B981;
+  --color-green-light: #D1FAE5;
+  --color-purple: #8B5CF6;
+  --color-purple-light: #EDE9FE;
+  --color-indigo: #4F46E5;
+  --color-indigo-light: #E0E7FF;
+
   /* Spacing Scale */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -118,6 +129,12 @@ a:hover {
 
 .text-h2 {
   font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.text-h3 {
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
 }

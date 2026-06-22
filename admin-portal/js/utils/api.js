@@ -51,7 +51,7 @@ export const AdminSession = {
       console.warn('Logout API failed, clearing local session anyway');
     } finally {
       this.clearSession();
-      window.location.href = '/admin/login'; // Adjust to actual route if needed
+      window.location.href = 'index.html'; // Adjust to actual route if needed
     }
   },
 
@@ -135,7 +135,7 @@ export const AdminSession = {
     setInterval(() => {
       if (this.getSession() && !this.isAuthenticated()) {
         // Session expired
-        window.location.href = '/admin/login?expired=1'; // Redirect with query param
+        window.location.href = 'index.html?expired=1'; // Redirect with query param
       }
     }, 60000); // Check every minute
   }

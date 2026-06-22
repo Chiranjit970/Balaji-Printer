@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard - Balaji Printers</title>
+  <title>Dashboard - Balaji Printers Admin</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +11,9 @@
   
   <link rel="stylesheet" href="./css/design-system.css">
   <link rel="stylesheet" href="./css/dashboard.css">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -18,13 +21,18 @@
     <!-- Sidebar -->
     <aside class="admin-sidebar">
       <div class="sidebar-header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        <span class="text-h2">Balaji Printers</span>
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z"></path><path d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9Z"></path></svg>
+        </div>
+        <div class="logo-text-group">
+          <span class="text-h3" style="color: white;">Balaji Printers</span>
+          <span class="text-caption" style="color: #9CA3AF;">Admin Panel</span>
+        </div>
       </div>
       
       <nav class="sidebar-nav">
         <a href="#" class="nav-item active">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span class="text-body-semibold">Dashboard</span>
         </a>
         <a href="#" class="nav-item">
@@ -32,80 +40,213 @@
           <span class="text-body-semibold">Orders</span>
         </a>
         <a href="#" class="nav-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"></path><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path><path d="m3.3 7 8.7 5 8.7-5"></path><path d="M12 22V12"></path></svg>
           <span class="text-body-semibold">Products</span>
         </a>
         <a href="#" class="nav-item">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span class="text-body-semibold">Customers</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+          <span class="text-body-semibold">Categories</span>
+        </a>
+        <a href="#" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span class="text-body-semibold">Users</span>
+        </a>
+        <a href="#" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
+          <span class="text-body-semibold">Revenue / Reports</span>
+        </a>
+        <a href="#" class="nav-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <span class="text-body-semibold">Settings</span>
         </a>
       </nav>
+
+      <div class="sidebar-footer">
+        <a href="#" id="logout-btn" class="nav-item logout-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <span class="text-body-semibold">Logout</span>
+        </a>
+      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="admin-main">
       <header class="top-bar">
-        <div class="user-profile">
-          <span id="admin-name" class="text-body-semibold">Admin</span>
-          <button id="logout-btn" class="admin-button" style="width: auto; height: 36px; padding: 0 16px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-            Logout
+        <div class="top-bar-left">
+          <button class="icon-button menu-toggle" aria-label="Toggle Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
           </button>
+          <h2 class="text-h3 m-0">Dashboard</h2>
+        </div>
+
+        <div class="top-bar-right">
+          <button class="icon-button notification-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+            <span class="notification-badge">3</span>
+          </button>
+          
+          <div class="user-profile">
+            <div class="avatar">A</div>
+            <div class="user-info">
+              <span id="admin-name" class="text-body-semibold">Admin</span>
+              <span class="text-caption text-muted">Super Admin</span>
+            </div>
+          </div>
         </div>
       </header>
 
       <div class="page-content">
-        <div class="page-header">
-          <h1 class="text-display">Dashboard Overview</h1>
-          <p class="text-body text-muted">Welcome to your Balaji Printers control center.</p>
+        <!-- Page Header -->
+        <div class="page-header flex-between">
+          <div>
+            <h1 class="text-display">Dashboard Overview</h1>
+            <p class="text-body text-muted mt-1">Welcome back, Admin! Here's what's happening with your store today.</p>
+          </div>
+          <div class="date-picker-wrapper">
+            <button class="date-picker-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+              May 12, 2025
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-2"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+          </div>
         </div>
 
-        <div class="metrics-grid">
-          <div class="metric-card">
-            <h3 class="metric-title text-caption-semibold">TOTAL ORDERS</h3>
-            <div class="metric-value text-display">1,245</div>
-            <p class="text-success text-caption">↑ 12% from last month</p>
+        <!-- KPI Grid -->
+        <div class="kpi-grid mt-6">
+          <!-- Total Orders Today -->
+          <div class="kpi-card">
+            <div class="kpi-header flex-between">
+              <div class="kpi-icon-wrapper bg-blue-light text-blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+              </div>
+              <div class="kpi-info align-right">
+                <h3 class="text-caption text-muted font-medium">Total Orders Today</h3>
+                <div class="text-h1 mt-1">32</div>
+              </div>
+            </div>
+            <div class="kpi-footer mt-4">
+              <span class="text-success text-caption font-medium">↗ 12%</span> <span class="text-caption text-muted">vs yesterday</span>
+            </div>
           </div>
-          <div class="metric-card">
-            <h3 class="metric-title text-caption-semibold">TOTAL REVENUE</h3>
-            <div class="metric-value text-display">₹2,45,890</div>
-            <p class="text-success text-caption">↑ 8% from last month</p>
+          
+          <!-- Pending Orders -->
+          <div class="kpi-card">
+            <div class="kpi-header flex-between">
+              <div class="kpi-icon-wrapper bg-orange-light text-orange">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div class="kpi-info align-right">
+                <h3 class="text-caption text-muted font-medium">Pending Orders</h3>
+                <div class="text-h1 mt-1">18</div>
+              </div>
+            </div>
+            <div class="kpi-footer mt-4">
+              <span class="text-success text-caption font-medium">↗ 8%</span> <span class="text-caption text-muted">vs yesterday</span>
+              <div class="text-caption text-muted mt-1">(Placed + Processing)</div>
+            </div>
           </div>
-          <div class="metric-card">
-            <h3 class="metric-title text-caption-semibold">TOTAL PRODUCTS</h3>
-            <div class="metric-value text-display">320</div>
-            <p class="text-muted text-caption">In 12 categories</p>
+
+          <!-- Total Revenue Today -->
+          <div class="kpi-card">
+            <div class="kpi-header flex-between">
+              <div class="kpi-icon-wrapper bg-green-light text-green">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4H6"></path><path d="M15 9H6"></path><path d="M10.5 19V4"></path><path d="M15 14H6"></path><path d="M15 14c-3.1-1.3-4.5-4-4.5-4"></path></svg>
+              </div>
+              <div class="kpi-info align-right">
+                <h3 class="text-caption text-muted font-medium">Total Revenue Today</h3>
+                <div class="text-h1 mt-1">₹24,850</div>
+              </div>
+            </div>
+            <div class="kpi-footer mt-4">
+              <span class="text-success text-caption font-medium">↗ 15%</span> <span class="text-caption text-muted">vs yesterday</span>
+            </div>
           </div>
-          <div class="metric-card">
-            <h3 class="metric-title text-caption-semibold">ACTIVE USERS</h3>
-            <div class="metric-value text-display">842</div>
-            <p class="text-success text-caption">↑ 24 new this week</p>
+
+          <!-- Total Customers Today -->
+          <div class="kpi-card">
+            <div class="kpi-header flex-between">
+              <div class="kpi-icon-wrapper bg-purple-light text-purple">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              </div>
+              <div class="kpi-info align-right">
+                <h3 class="text-caption text-muted font-medium">Total Customers Today</h3>
+                <div class="text-h1 mt-1">21</div>
+              </div>
+            </div>
+            <div class="kpi-footer mt-4">
+              <span class="text-success text-caption font-medium">↗ 10%</span> <span class="text-caption text-muted">vs yesterday</span>
+            </div>
           </div>
         </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid mt-6">
+          <div class="chart-card">
+            <div class="chart-header flex-between mb-4">
+              <h3 class="text-body-semibold">Orders Trend (Daily)</h3>
+              <div class="filter-dropdown">
+                <button class="filter-btn text-caption font-medium">
+                  7 Days
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="ordersChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-card">
+            <div class="chart-header flex-between mb-4">
+              <h3 class="text-body-semibold">Revenue Trend (Daily)</h3>
+              <div class="filter-dropdown">
+                <button class="filter-btn text-caption font-medium">
+                  7 Days
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="m6 9 6 6 6-6"></path></svg>
+                </button>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="revenueChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="recent-orders-card mt-6">
+          <div class="card-header flex-between mb-4">
+            <h3 class="text-body-semibold m-0">Recent Orders</h3>
+            <a href="#" class="text-blue text-caption font-medium flex-center view-all-link">View All Orders <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="m9 18 6-6-6-6"></path></svg></a>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Amount</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Order Date</th>
+                </tr>
+              </thead>
+              <tbody id="recent-orders-body">
+                <!-- Data will be populated via JS -->
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="card-footer mt-4 text-center">
+            <span class="text-caption text-muted">Showing 5 of 32 orders</span>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
 
-  <script type="module">
-    import { AdminSession } from './js/utils/api.js';
-
-    document.addEventListener('DOMContentLoaded', () => {
-      AdminSession.init();
-
-      if (!AdminSession.isAuthenticated()) {
-        window.location.href = '/admin-portal/index.html';
-        return;
-      }
-
-      const admin = AdminSession.getAdmin();
-      if (admin && admin.name) {
-        document.getElementById('admin-name').textContent = admin.name;
-      }
-
-      document.getElementById('logout-btn').addEventListener('click', async () => {
-        await AdminSession.logout();
-      });
-    });
-  </script>
+  <script type="module" src="./js/dashboard.js"></script>
 </body>
 </html>

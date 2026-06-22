@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // If already authenticated, redirect to dashboard
   if (AdminSession.isAuthenticated()) {
-    window.location.href = '/admin-portal/dashboard.html';
+    window.location.href = 'dashboard.html';
     return;
   }
 
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Success: fade out login form and redirect
       document.querySelector('.admin-auth-layout').style.animation = 'fadeOut var(--transition-slow) forwards';
       setTimeout(() => {
-        window.location.href = '/admin-portal/dashboard.html';
+        window.location.href = 'dashboard.html';
       }, 300);
 
     } catch (error) {

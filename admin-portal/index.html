@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - Balaji Printers</title>
+  <meta name="description" content="Secure admin portal for Balaji Printers management.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/design-system.css">
+  <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+
+  <main class="admin-auth-layout">
+    <!-- Left Panel -->
+    <section class="admin-auth-left" aria-labelledby="left-panel-heading">
+      
+      <div class="brand-header">
+        <div class="brand-logo-container">
+          <!-- Logo SVG -->
+          <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <h1 class="brand-name text-display">Balaji Printers</h1>
+        </div>
+        <div class="brand-subtitle-container">
+          <span class="brand-subtitle text-caption-semibold">Admin Panel</span>
+          <div class="brand-accent-line"></div>
+        </div>
+      </div>
+
+      <div class="value-prop">
+        <h2 id="left-panel-heading" class="text-h1">Manage your business with ease</h2>
+        <p class="text-body">View and manage orders, products, users, reports and much more from your admin dashboard.</p>
+      </div>
+
+      <!-- Mobile Feature List (Visible only on small screens) -->
+      <ul class="mobile-feature-list">
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Manage Orders
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Manage Products & Categories
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Monitor Customers
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Revenue Analytics
+        </li>
+      </ul>
+
+      <!-- Desktop Dashboard Preview Image -->
+      <div class="dashboard-preview">
+        <img src="./assets/images/dashboard-preview.png" alt="Dashboard preview showing metrics" />
+      </div>
+
+      <div class="decorative-illustration">
+        <img src="./assets/images/decorative-plant.png" alt="Decorative plant illustration" />
+      </div>
+
+    </section>
+
+    <!-- Right Panel -->
+    <section class="admin-auth-right" aria-labelledby="auth-heading">
+      
+      <div class="auth-card">
+        
+        <div class="auth-header">
+          <div class="security-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <rect x="9" y="11" width="6" height="4" rx="1"></rect>
+              <path d="M12 11v-2a2 2 0 1 1 4 0"></path>
+            </svg>
+          </div>
+          <h2 id="auth-heading" class="auth-title text-h1">Welcome Back!</h2>
+          <p class="auth-subtitle text-body">Sign in to continue to your admin account</p>
+        </div>
+
+        <!-- Validation Banner -->
+        <div id="error-banner" class="validation-banner" role="alert" aria-live="assertive">
+          <svg class="banner-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="banner-text"></span>
+        </div>
+
+        <form id="login-form" class="auth-form" novalidate>
+          
+          <!-- Email Field -->
+          <div id="email-group" class="admin-input-group">
+            <label for="email" class="admin-label text-caption-semibold">Email Address <span class="text-danger">*</span></label>
+            <div class="admin-input-wrapper">
+              <svg class="admin-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              <input type="email" id="email" class="admin-input" placeholder="admin@example.com" autocomplete="email" required>
+            </div>
+            <div id="email-error" class="error-text"></div>
+          </div>
+
+          <!-- Password Field -->
+          <div id="password-group" class="admin-input-group">
+            <label for="password" class="admin-label text-caption-semibold">Password <span class="text-danger">*</span></label>
+            <div class="admin-input-wrapper">
+              <svg class="admin-input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <input type="password" id="password" class="admin-input" placeholder="Enter your password" autocomplete="current-password" required>
+              <button type="button" class="password-toggle" aria-label="Show password">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </button>
+            </div>
+            <div id="password-error" class="error-text"></div>
+          </div>
+
+          <!-- Options Row -->
+          <div class="auth-options">
+            <label class="admin-checkbox-label">
+              <input type="checkbox" id="remember" class="admin-checkbox">
+              <span class="text-body">Remember me</span>
+            </label>
+            <a href="#" class="admin-link text-body">Forgot Password?</a>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="login-btn" class="admin-button text-button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Login
+          </button>
+
+          <div class="divider">
+            <span>or</span>
+          </div>
+
+          <!-- Security Reassurance -->
+          <div class="security-notice">
+            <svg class="security-notice-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+            <div>
+              <h3 class="security-notice-title text-caption-semibold">Secure Admin Access</h3>
+              <p class="security-notice-desc text-caption">Protected by encrypted authentication and secure session management.</p>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <footer class="auth-footer">
+        <p class="text-caption">© 2026 Balaji Printers. All rights reserved.</p>
+      </footer>
+    </section>
+
+  </main>
+
+  <!-- Scripts -->
+  <script type="module" src="./js/auth/login.js"></script>
+</body>
+</html>

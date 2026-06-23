@@ -5,6 +5,9 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\FileDownloadController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductImageController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,5 +50,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             // File Downloads
             Route::get('files/{print_job_id}/download', [FileDownloadController::class, 'download'])->name('files.download');
         });
+
+        // Products Management (Module 4)
+        Route::post('/products/bulk', [ProductController::class, 'bulk'])->name('products.bulk');
+        Route::resource('products', ProductController::class)->except(['show']);
+        Route::patch('/products/{product}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggleActive');
+        Route::patch('/products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggleFeatured');
+        
+        // Product Images
+        Route::post('/products/{product}/images', [ProductImageController::class, 'store'])->name('products.images.store');
+        Route::delete('/products/images/{image}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
+        Route::patch('/products/images/{image}/primary', [ProductImageController::class, 'setPrimary'])->name('products.images.setPrimary');
     });
 });
+

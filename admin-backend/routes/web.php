@@ -7,6 +7,9 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\FileDownloadController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RevenueController;
 
 
 /*
@@ -61,6 +64,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/products/{product}/images', [ProductImageController::class, 'store'])->name('products.images.store');
         Route::delete('/products/images/{image}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
         Route::patch('/products/images/{image}/primary', [ProductImageController::class, 'setPrimary'])->name('products.images.setPrimary');
+
+        // Category Management (Module 5)
+        Route::resource('categories', CategoryController::class)->except(['show']);
+        Route::patch('/categories/{category}/toggle-active', [CategoryController::class, 'toggleActive'])->name('categories.toggleActive');
+        Route::patch('/categories/{category}/toggle-featured', [CategoryController::class, 'toggleFeatured'])->name('categories.toggleFeatured');
+
+        // User Management (Module 6)
+        Route::resource('users', UserController::class)->only(['index', 'show', 'update']);
+        Route::post('/users/{user}/toggle-block', [UserController::class, 'toggleBlock'])->name('users.toggleBlock');
+        Route::post('/users/{user}/notify', [UserController::class, 'sendNotification'])->name('users.notify');
+
+        // Revenue & Reports (Module 7)
+        Route::get('/revenue', [RevenueController::class, 'index'])->name('revenue.index');
+        Route::get('/revenue/export', [RevenueController::class, 'exportCsv'])->name('revenue.export');
     });
 });
 

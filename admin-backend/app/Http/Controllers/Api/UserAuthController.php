@@ -80,6 +80,13 @@ class UserAuthController extends Controller
             ['name' => 'Customer ' . substr($phone, -4)]
         );
 
+        if ($user->is_blocked) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Your account has been blocked.'
+            ], 403);
+        }
+
         // Revoke old tokens if any
         $user->tokens()->delete();
 

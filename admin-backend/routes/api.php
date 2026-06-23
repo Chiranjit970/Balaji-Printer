@@ -30,7 +30,7 @@ Route::get('/products/{id}/related', [StoreController::class, 'getRelatedProduct
 Route::get('/banners', [StoreController::class, 'getBanners']);
 
 // Protected Routes (Requires Sanctum Token)
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'check.blocked'])->group(function () {
     // Auth Profile
     Route::get('/auth/me', [UserAuthController::class, 'me']);
 

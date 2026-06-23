@@ -17,11 +17,16 @@ class User extends Authenticatable
         'phone',
         'email',
         'password',
+        'is_blocked',
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'is_blocked' => 'boolean',
     ];
 
     /**

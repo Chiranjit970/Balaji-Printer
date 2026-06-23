@@ -143,6 +143,8 @@ class ProductSeeder extends Seeder
                 ['id' => $prod['id']],
                 [
                     'name' => $prod['name'],
+                    'slug' => \Illuminate\Support\Str::slug($prod['name']),
+                    'sku' => 'SKU-' . strtoupper(str_replace(' ', '-', $prod['name'])),
                     'description' => $prod['description'],
                     'short_description' => $prod['short_description'],
                     'price' => $prod['price'],

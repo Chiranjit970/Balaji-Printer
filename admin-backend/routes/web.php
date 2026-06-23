@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RevenueController;
-
+use App\Http\Controllers\Admin\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +78,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Revenue & Reports (Module 7)
         Route::get('/revenue', [RevenueController::class, 'index'])->name('revenue.index');
         Route::get('/revenue/export', [RevenueController::class, 'exportCsv'])->name('revenue.export');
+
+        // Settings & Admin Account (Module 8)
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', [SettingsController::class, 'index'])->name('index');
+            Route::post('/', [SettingsController::class, 'save'])->name('save');
+            Route::get('/account', [SettingsController::class, 'account'])->name('account');
+            Route::post('/account/profile', [SettingsController::class, 'updateProfile'])->name('account.updateProfile');
+            Route::post('/account/password', [SettingsController::class, 'updatePassword'])->name('account.updatePassword');
+        });
     });
 });
 

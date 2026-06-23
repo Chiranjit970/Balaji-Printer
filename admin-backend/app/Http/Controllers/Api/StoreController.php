@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\SettingsService;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
 
@@ -148,7 +149,31 @@ class StoreController extends Controller
                 'backgroundColor' => '#F0FDF4',
             ]
         ];
+        
+        return response()->json($mockBanners);
+    }
 
-        return response()->json($banners);
+    /**
+     * Get public settings for the app.
+     */
+    public function getSettings()
+    {
+        $keys = [
+            'business_name', 'business_phone', 'support_phone', 'support_email', 
+            'whatsapp_number', 'business_address', 'working_hours', 'holiday_notice', 
+            'terms_url', 'privacy_policy_url', 'refund_policy_url', 'estimated_delivery_days', 
+            'minimum_order_amount', 'free_delivery_threshold', 'delivery_fee', 
+            'is_delivery_enabled', 'business_logo_url'
+        ];
+
+        $settings = [];
+        foreach ($keys as $key) {
+            $settings[$key] = SettingsService::get($key);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $settings
+        ]);
     }
 }

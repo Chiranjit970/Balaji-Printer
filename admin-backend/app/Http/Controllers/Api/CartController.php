@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\PrintJob;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Services\PrintPricingService;
 use App\Http\Resources\CartItemResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -75,10 +76,10 @@ class CartController extends Controller
                 ]);
             } else { // print
                 // 1. Calculate price from settings
-                $pricing = $this->calculatePrintPrice(
+                $pricing = PrintPricingService::calculate(
                     $request->pageCount,
                     $request->copies,
-                    $request->options
+                    $request->options ?? []
                 );
 
                 // 2. Create PrintJob record
@@ -92,9 +93,9 @@ class CartController extends Controller
                     'color_mode' => $request->options['color'],
                     'sides' => $request->options['sides'],
                     'binding' => $request->options['binding'],
-                    'base_price' => $pricing['base'],
-                    'color_price' => $pricing['color'],
-                    'binding_price' => $pricing['binding'],
+                    'base_price' => $pricing['page_price'],
+                    'color_price' => $pricing['color_multiplier'] > 1 && strtolower($request->options['color'] ?? '') === 'color' ? $pricing['page_price'] : 0,
+                    'binding_price' => $pricing['binding_cost'],
                     'total_price' => $pricing['total'],
                 ]);
 
@@ -217,41 +218,32 @@ class CartController extends Controller
     }
 
     /**
-     * Helper to calculate print job pricing using settings.
+     * API endpoint to calculate price preview dynamically.
      */
-    private function calculatePrintPrice($pages, $copies, $options)
+    public function calculatePrice(Request $request)
     {
-        $perPageBW = (float) Setting::where('key', 'print_pricing_black_white')->value('value') ?: 2.00;
-        $perPageColor = (float) Setting::where('key', 'print_pricing_color')->value('value') ?: 10.00;
-        
-        $bindingCost = 0.00;
-        $bindingOpt = strtolower($options['binding'] ?? 'none');
-        if (str_contains($bindingOpt, 'spiral')) {
-            $bindingCost = (float) Setting::where('key', 'binding_spiral')->value('value') ?: 50.00;
-        } elseif (str_contains($bindingOpt, 'staple')) {
-            $bindingCost = (float) Setting::where('key', 'binding_staple')->value('value') ?: 10.00;
+        $validator = Validator::make($request->all(), [
+            'pages' => 'required|integer|min:1',
+            'copies' => 'required|integer|min:1',
+            'options' => 'nullable|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $paperMultiplier = 1.0;
-        $paperSize = strtolower($options['paperSize'] ?? 'a4');
-        if (str_contains($paperSize, 'a3')) {
-            $paperMultiplier = (float) Setting::where('key', 'paper_size_a3_multiplier')->value('value') ?: 2.0;
-        }
+        $pricing = PrintPricingService::calculate(
+            $request->pages,
+            $request->copies,
+            $request->options ?? []
+        );
 
-        $isColor = strtolower($options['color'] ?? '') === 'color';
-        $costPerPage = ($isColor ? $perPageColor : $perPageBW) * $paperMultiplier;
-
-        $baseTotal = $costPerPage * $pages;
-        $bindingTotal = $bindingCost;
-        $totalPerCopy = $baseTotal + $bindingTotal;
-        $grandTotal = $totalPerCopy * $copies;
-
-        return [
-            'base' => $baseTotal,
-            'color' => $isColor ? ($perPageColor - $perPageBW) * $pages : 0.00,
-            'binding' => $bindingTotal,
-            'copies' => $copies,
-            'total' => $grandTotal
-        ];
+        return response()->json([
+            'success' => true,
+            'data' => $pricing
+        ]);
     }
 }

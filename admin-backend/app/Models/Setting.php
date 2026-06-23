@@ -13,6 +13,8 @@ class Setting extends Model
         'value',
         'type',
         'description',
+        'group',
+        'label',
     ];
 
     /**

@@ -3,9 +3,9 @@
         open: false, 
         template: 'placed',
         customMessage: '',
-        title: 'Update regarding Order {{ $order->display_order_id ?? \'\' }}',
+        title: 'Update regarding Order {{ $order->display_order_id ?? "" }}',
         get messageText() {
-            const id = '{{ $order->display_order_id ?? \'\' }}';
+            const id = '{{ $order->display_order_id ?? "" }}';
             switch(this.template) {
                 case 'placed': return 'Order Received! Your order #' + id + ' has been placed.';
                 case 'processing': return 'Order Processing. Your order #' + id + ' is being prepared.';

@@ -10,7 +10,7 @@ use App\Models\CartItem;
 use App\Models\Address;
 use App\Models\PrintJob;
 use App\Models\Payment;
-use App\Models\Setting;
+use App\Services\SettingsService;
 use App\Http\Resources\OrderResource;
 use App\Events\OrderStatusUpdated;
 use Illuminate\Support\Facades\Validator;
@@ -117,10 +117,27 @@ class CustomerOrderController extends Controller
 
                 $subtotal = $printJobsTotal + $productsTotal;
 
+                // Validate minimum order amount
+                $minOrderAmount = SettingsService::getFloat('minimum_order_amount');
+                if ($subtotal < $minOrderAmount) {
+                    throw new \Exception("Minimum order amount is ₹{$minOrderAmount}. Your subtotal is ₹{$subtotal}.");
+                }
+
+                // Check if delivery is enabled
+                $isDeliveryEnabled = SettingsService::getBool('is_delivery_enabled');
+                if (!$isDeliveryEnabled && $request->deliveryAddressId) {
+                    // This is optional if we assume 'deliveryAddressId' means delivery requested
+                    // For now, if disabled, we could force fee to 0 or throw exception
+                    // Let's just set delivery fee to 0 if delivery is disabled
+                }
+
                 // Load threshold & fee settings
-                $freeThreshold = (float) Setting::where('key', 'free_delivery_threshold')->value('value') ?: 500.00;
-                $deliveryFee = (float) Setting::where('key', 'delivery_fee')->value('value') ?: 40.00;
-                $feeApplied = $subtotal >= $freeThreshold ? 0.00 : $deliveryFee;
+                $freeThreshold = SettingsService::getFloat('free_delivery_threshold');
+                $deliveryFee = SettingsService::getFloat('delivery_fee');
+                
+                // If delivery is disabled globally, we might charge 0. 
+                // But normally the app should block it. Assuming fee logic applies if address provided.
+                $feeApplied = ($subtotal >= $freeThreshold || !$isDeliveryEnabled) ? 0.00 : $deliveryFee;
 
                 $total = $subtotal + $feeApplied;
 

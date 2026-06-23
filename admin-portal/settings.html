@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Balaji Printers Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    .sidebar { width: 260px; height: 100vh; position: fixed; left: 0; top: 0; background-color: white; border-right: 1px solid #e2e8f0; z-index: 40; }
+    .main-content { margin-left: 260px; min-height: 100vh; padding-top: 64px; }
+    .topbar { height: 64px; position: fixed; top: 0; right: 0; left: 260px; background-color: white; border-bottom: 1px solid #e2e8f0; z-index: 30; }
+    
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: #64748b; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .nav-item:hover { background-color: #f1f5f9; color: #0f172a; }
+    .nav-item.active { background-color: #eff6ff; color: #2563eb; border-right: 3px solid #2563eb; }
+    
+    .tab-btn { padding: 12px 20px; font-weight: 500; color: #64748b; border-bottom: 2px solid transparent; transition: all 0.2s; cursor: pointer; }
+    .tab-btn:hover { color: #334155; }
+    .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; }
+  </style>
+</head>
+<body class="text-slate-800" x-data="{ activeTab: 'print_pricing' }">
+
+  <!-- Sidebar (Mock) -->
+  <aside class="sidebar">
+    <div class="h-16 flex items-center px-6 border-b border-slate-200">
+      <div class="font-bold text-xl text-blue-600 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+        Balaji Printers
+      </div>
+    </div>
+    <nav class="py-4 flex flex-col gap-1">
+      <a href="dashboard.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+        Dashboard
+      </a>
+      <a href="settings.html" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        Platform Settings
+      </a>
+      <a href="admin-account.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Admin Account
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Topbar (Mock) -->
+  <header class="topbar flex items-center justify-between px-8">
+    <h1 class="text-xl font-semibold">Settings</h1>
+    <div class="flex items-center gap-4">
+      <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">A</div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content p-8">
+    
+    <!-- Header Section -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-slate-900">Platform Settings</h2>
+      <p class="text-slate-500 mt-1">Manage global pricing, delivery rules, and business information.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      
+      <!-- Tabs Header -->
+      <div class="flex border-b border-slate-200 px-4 pt-2">
+        <button @click="activeTab = 'print_pricing'" :class="{'active': activeTab === 'print_pricing'}" class="tab-btn flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+          Print Pricing
+        </button>
+        <button @click="activeTab = 'delivery'" :class="{'active': activeTab === 'delivery'}" class="tab-btn flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+          Delivery Rules
+        </button>
+        <button @click="activeTab = 'business'" :class="{'active': activeTab === 'business'}" class="tab-btn flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          Business Info
+        </button>
+      </div>
+
+      <!-- Tab Content: Print Pricing -->
+      <div x-show="activeTab === 'print_pricing'" class="p-8">
+        <form action="#" method="POST">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Base Pricing -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+              <h3 class="font-semibold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                Base Pricing
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">B&W Price (per page) ₹</label>
+                  <input type="number" step="0.01" value="2.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Color Price Multiplier</label>
+                  <input type="number" step="0.01" value="5.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                  <p class="text-xs text-slate-500 mt-1">If B&W is ₹2 and multiplier is 5, Color is ₹10.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Paper Size & Quality Surcharges -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+              <h3 class="font-semibold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Paper Surcharges
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">A3 Size Surcharge (₹ per page)</label>
+                  <input type="number" step="0.01" value="2.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Premium Paper Surcharge (₹ per page)</label>
+                  <input type="number" step="0.01" value="1.50" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+              </div>
+            </div>
+
+            <!-- Binding & Finishing -->
+            <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+              <h3 class="font-semibold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                Binding & Finishing
+              </h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Spiral Binding (Base Fee ₹)</label>
+                  <input type="number" step="0.01" value="40.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Hard Binding (Base Fee ₹)</label>
+                  <input type="number" step="0.01" value="150.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1">Lamination Fee (₹ per page)</label>
+                  <input type="number" step="0.01" value="10.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="mt-8 flex justify-end">
+            <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-6 rounded-lg transition shadow-sm flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              Save Print Pricing
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab Content: Delivery -->
+      <div x-show="activeTab === 'delivery'" class="p-8" style="display: none;">
+        <form action="#" method="POST" class="max-w-2xl">
+          <div class="space-y-6">
+            
+            <div class="flex items-center gap-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+              <input type="checkbox" id="delivery_enabled" checked class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+              <label for="delivery_enabled" class="font-medium text-blue-900 cursor-pointer">Enable Home Delivery Service</label>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Standard Delivery Fee (₹)</label>
+                <input type="number" step="0.01" value="50.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Free Delivery Threshold (₹)</label>
+                <input type="number" step="0.01" value="500.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <p class="text-xs text-slate-500 mt-1">Orders above this amount get free delivery.</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Minimum Order Amount (₹)</label>
+                <input type="number" step="0.01" value="50.00" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                <p class="text-xs text-slate-500 mt-1">Customers cannot checkout below this amount.</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Estimated Delivery Days</label>
+                <input type="number" value="2" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200 flex justify-end">
+              <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-6 rounded-lg transition shadow-sm">
+                Save Delivery Rules
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab Content: Business Info -->
+      <div x-show="activeTab === 'business'" class="p-8" style="display: none;">
+        <form action="#" method="POST" class="max-w-3xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Business Name</label>
+              <input type="text" value="Balaji Printers" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1">Support Phone / WhatsApp</label>
+              <input type="text" value="+91 9876543210" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-700 mb-1">Business Address</label>
+              <textarea rows="2" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">123 Printing Hub, College Road, Kolkata, WB 700001</textarea>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-700 mb-1">Working Hours</label>
+              <input type="text" value="Mon-Sat: 9:00 AM - 8:00 PM | Sun: Closed" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-slate-700 mb-1">Holiday Notice (Banner Text)</label>
+              <input type="text" placeholder="e.g. Shop is closed for Diwali from 10th to 12th Nov." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+              <p class="text-xs text-slate-500 mt-1">Leave empty to hide banner in app.</p>
+            </div>
+            
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-slate-200 flex justify-end">
+            <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-6 rounded-lg transition shadow-sm">
+              Save Business Info
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+</body>
+</html>

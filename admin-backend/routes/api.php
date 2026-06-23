@@ -28,6 +28,7 @@ Route::get('/products', [StoreController::class, 'getProducts']);
 Route::get('/products/{id}', [StoreController::class, 'getProduct']);
 Route::get('/products/{id}/related', [StoreController::class, 'getRelatedProducts']);
 Route::get('/banners', [StoreController::class, 'getBanners']);
+Route::get('/settings/public', [StoreController::class, 'getSettings']);
 
 // Protected Routes (Requires Sanctum Token)
 Route::middleware(['auth:sanctum', 'check.blocked'])->group(function () {
@@ -51,6 +52,9 @@ Route::middleware(['auth:sanctum', 'check.blocked'])->group(function () {
         Route::delete('/{id}', [CartController::class, 'destroy']);
         Route::post('/clear', [CartController::class, 'clear']);
     });
+
+    // Print Calculation
+    Route::post('/print/calculate-price', [CartController::class, 'calculatePrice']);
 
     // Checkout & Orders
     Route::prefix('orders')->group(function () {

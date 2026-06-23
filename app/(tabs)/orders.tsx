@@ -183,7 +183,7 @@ export default function OrdersScreen() {
         cartCount={cartCount}
         notificationCount={notificationCount}
         onCartPress={() => router.push('/(checkout)/cart')}
-        onNotificationPress={() => router.push('/(tabs)/notifications')}
+        onNotificationPress={() => router.push('/(profile)/notifications' as any)}
       />
 
       {/* Search Input */}

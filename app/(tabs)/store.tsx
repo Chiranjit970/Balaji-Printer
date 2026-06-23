@@ -106,7 +106,7 @@ export default function StoreScreen() {
           cartCount={cartCount}
           notificationCount={notificationCount}
           onCartPress={() => router.push('/(checkout)/cart')}
-          onNotificationPress={() => router.push('/(tabs)/notifications')}
+          onNotificationPress={() => router.push('/(profile)/notifications' as any)}
         />
         <StoreSkeleton />
       </SafeAreaView>
@@ -120,7 +120,7 @@ export default function StoreScreen() {
           cartCount={cartCount}
           notificationCount={notificationCount}
           onCartPress={() => router.push('/(checkout)/cart')}
-          onNotificationPress={() => router.push('/(tabs)/notifications')}
+          onNotificationPress={() => router.push('/(profile)/notifications' as any)}
         />
         <EmptyState
           icon="alert-circle-outline"
@@ -147,7 +147,7 @@ export default function StoreScreen() {
         onCartPress={() => {
           router.push('/(checkout)/cart');
         }}
-        onNotificationPress={() => router.push('/(tabs)/notifications')}
+        onNotificationPress={() => router.push('/(profile)/notifications' as any)}
       />
 
       {/* Interactive Search Bar (navigates to Search Screen on Press) */}

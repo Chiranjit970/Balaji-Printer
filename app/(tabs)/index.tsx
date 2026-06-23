@@ -45,7 +45,7 @@ export default function HomeScreen() {
   };
   
   const handleNotificationPress = () => {
-    router.push('/(tabs)/notifications');
+    router.push('/(profile)/notifications' as any);
   };
   
   const handleQuickActionPress = (route: string) => {

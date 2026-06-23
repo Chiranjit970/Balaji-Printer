@@ -65,7 +65,7 @@ class ProductService
         }
 
         $perPage = in_array((int)($filters['per_page'] ?? 5), [5, 10, 25])
-            ? (int) $filters['per_page']
+            ? (int) ($filters['per_page'] ?? 5)
             : 5;
 
         return $query->paginate($perPage)->withQueryString();

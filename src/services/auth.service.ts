@@ -4,6 +4,7 @@ import type {
   OTPVerifyResponse,
 } from '../types/otp.types';
 import { MockOTPService } from './mockOtp.service';
+import { StorageService } from './storage.service';
 
 /**
  * Authentication service — single entry point for all auth operations.
@@ -30,7 +31,6 @@ export const AuthService = {
       return { valid: false };
     }
 
-    // Extract timestamp from token format: mock_token_{userId}_{timestamp}
     const parts = token.split('_');
     if (parts.length < 4) {
       return { valid: false };
@@ -48,14 +48,17 @@ export const AuthService = {
       return { valid: false }; // Token expired
     }
 
-    // Mock user object
+    const phone = parts.length >= 5 ? parts[3] : '+919876543210';
+    const existingProfile = await StorageService.getUserProfile(phone);
+    const user: User = existingProfile || {
+      id: parts[2],
+      name: 'Test User',
+      phone,
+    };
+
     return {
       valid: true,
-      user: {
-        id: parts[2],
-        name: 'Test User',
-        phone: '+919876543210',
-      },
+      user,
     };
   },
 

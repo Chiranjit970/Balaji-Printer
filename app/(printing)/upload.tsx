@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../src/constants/colors';
 import { typography } from '../../src/constants/typography';
@@ -25,8 +26,35 @@ export default function UploadScreen() {
       }
 
       const asset = result.assets[0];
+      let finalUri = asset.uri;
+
+      if (Platform.OS !== 'web' && FileSystem.documentDirectory) {
+        try {
+          const directory = `${FileSystem.documentDirectory}picked_documents/`;
+          
+          // Ensure directory exists
+          const dirInfo = await FileSystem.getInfoAsync(directory);
+          if (!dirInfo.exists) {
+            await FileSystem.makeDirectoryAsync(directory, { intermediates: true });
+          }
+          
+          // Generate a safe unique name
+          const filename = `${Date.now()}_${asset.name.replace(/\s+/g, '_')}`;
+          const destinationUri = `${directory}${filename}`;
+          
+          await FileSystem.copyAsync({
+            from: asset.uri,
+            to: destinationUri,
+          });
+          
+          finalUri = destinationUri;
+        } catch (copyError) {
+          console.error('[UploadScreen] Failed to copy document to permanent storage:', copyError);
+        }
+      }
+
       setFile({
-        uri: asset.uri,
+        uri: finalUri,
         name: asset.name,
         size: asset.size || 0,
         type: asset.mimeType || 'application/octet-stream',

@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '../constants/storage';
 import { Order, OrderStatus, OrderSearchParams, OrdersListResponse, OrderTimelineEvent } from '../types/order.types';
 import { ORDER_TIMELINE_STEPS, ORDER_STATUS_CONFIG } from '../constants/orders.constants';
 
@@ -9,10 +11,6 @@ export interface OrderPreview {
   total: number;
   itemCount: number;
 }
-
-// ─── Mock Order Database ───────────────────────────────────────────────
-// Seeded with sample orders for demonstration
-// In production: persisted in MySQL via Laravel API
 
 const generateTimeline = (currentStatus: OrderStatus): OrderTimelineEvent[] => {
   const currentStepIndex = ORDER_STATUS_CONFIG[currentStatus].stepIndex;
@@ -42,7 +40,7 @@ const generateTimeline = (currentStatus: OrderStatus): OrderTimelineEvent[] => {
 const MOCK_ORDERS: Order[] = [
   {
     id: 'order-001',
-    displayOrderId: 'BP12345678',
+    displayOrderId: 'BP20260620-1254',
     items: [
       {
         cartItemId: 'cart-print-001',
@@ -57,7 +55,7 @@ const MOCK_ORDERS: Order[] = [
           binding: 'No Binding',
         },
         price: 56.64,
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
       },
       {
         cartItemId: 'cart-prod-001',
@@ -67,7 +65,7 @@ const MOCK_ORDERS: Order[] = [
         price: 249,
         quantity: 2,
         image: 'https://images.unsplash.com/photo-1586769852044-692d6e3703f0?w=200',
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
       },
       {
         cartItemId: 'cart-prod-002',
@@ -77,7 +75,7 @@ const MOCK_ORDERS: Order[] = [
         price: 129,
         quantity: 1,
         image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=200',
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
       },
     ],
     deliveryAddress: {
@@ -112,7 +110,7 @@ const MOCK_ORDERS: Order[] = [
   },
   {
     id: 'order-002',
-    displayOrderId: 'BP12345677',
+    displayOrderId: 'BP20260618-9871',
     items: [
       {
         cartItemId: 'cart-prod-003',
@@ -121,15 +119,17 @@ const MOCK_ORDERS: Order[] = [
         name: 'Premium Visiting Card',
         price: 249,
         quantity: 2,
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
       },
     ],
     deliveryAddress: {
-      id: 'addr-001',
-      label: 'Home',
+      id: 'addr-002',
+      label: 'Office',
       name: 'Rohit Sharma',
       phone: '+91 98765 43210',
       line1: '456, GST Road, Guindy',
+      line2: '',
+      landmark: '',
       city: 'Chennai',
       state: 'Tamil Nadu',
       pincode: '600032',
@@ -154,7 +154,7 @@ const MOCK_ORDERS: Order[] = [
   },
   {
     id: 'order-003',
-    displayOrderId: 'BP12345676',
+    displayOrderId: 'BP20260615-5462',
     items: [
       {
         cartItemId: 'cart-prod-004',
@@ -163,7 +163,7 @@ const MOCK_ORDERS: Order[] = [
         name: 'A4 Flyer',
         price: 199,
         quantity: 1,
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
       },
     ],
     deliveryAddress: {
@@ -172,6 +172,8 @@ const MOCK_ORDERS: Order[] = [
       name: 'Rohit Sharma',
       phone: '+91 98765 43210',
       line1: '123, Park Street, Anna Nagar',
+      line2: '',
+      landmark: 'Near Anna Nagar Tower',
       city: 'Chennai',
       state: 'Tamil Nadu',
       pincode: '600040',
@@ -196,7 +198,7 @@ const MOCK_ORDERS: Order[] = [
   },
   {
     id: 'order-004',
-    displayOrderId: 'BP12345675',
+    displayOrderId: 'BP20260611-3419',
     items: [
       {
         cartItemId: 'cart-prod-005',
@@ -205,7 +207,7 @@ const MOCK_ORDERS: Order[] = [
         name: 'Roll-up Banner',
         price: 699,
         quantity: 1,
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
       },
       {
         cartItemId: 'cart-prod-006',
@@ -214,7 +216,7 @@ const MOCK_ORDERS: Order[] = [
         name: 'Spiral Notebook A5',
         price: 129,
         quantity: 3,
-        addedAt: new Date().toISOString(),
+        addedAt: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
       },
     ],
     deliveryAddress: {
@@ -223,6 +225,8 @@ const MOCK_ORDERS: Order[] = [
       name: 'Rohit Sharma',
       phone: '+91 98765 43210',
       line1: '123, Park Street, Anna Nagar',
+      line2: '',
+      landmark: 'Near Anna Nagar Tower',
       city: 'Chennai',
       state: 'Tamil Nadu',
       pincode: '600040',
@@ -247,14 +251,41 @@ const MOCK_ORDERS: Order[] = [
   },
 ];
 
-// Allow orders from Phase 5 checkout to be appended
-const runtimeOrders: Order[] = [];
-
 export const OrdersService = {
+  /**
+   * Helper to load orders, seeding defaults if empty
+   */
+  async loadFromStorage(): Promise<Order[]> {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.orders);
+      if (data) {
+        return JSON.parse(data);
+      }
+      // Seed default orders list on first access
+      await AsyncStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(MOCK_ORDERS));
+      return [...MOCK_ORDERS];
+    } catch (e) {
+      console.error('[OrdersService] Failed to load orders:', e);
+      return [...MOCK_ORDERS];
+    }
+  },
+
+  /**
+   * Helper to save orders list to storage
+   */
+  async saveToStorage(ordersList: Order[]): Promise<void> {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(ordersList));
+    } catch (e) {
+      console.error('[OrdersService] Failed to save orders:', e);
+      throw e;
+    }
+  },
+
   /**
    * Append confirmed order from Phase 5 checkout
    */
-  appendOrder(order: Order): void {
+  async appendOrder(order: Order): Promise<void> {
     // Add timeline and estimatedDelivery if not present
     if (!order.timeline || order.timeline.length === 0) {
       order.timeline = generateTimeline(order.status);
@@ -262,10 +293,12 @@ export const OrdersService = {
     if (!order.estimatedDelivery) {
       order.estimatedDelivery = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
     }
-    // Add to front so it appears first if not already present
-    const exists = runtimeOrders.some(o => o.id === order.id);
+
+    const ordersList = await this.loadFromStorage();
+    const exists = ordersList.some((o) => o.id === order.id);
     if (!exists) {
-      runtimeOrders.unshift(order);
+      ordersList.unshift(order);
+      await this.saveToStorage(ordersList);
     }
   },
 
@@ -273,22 +306,22 @@ export const OrdersService = {
    * Get paginated + filtered orders list
    */
   async getOrders(params?: OrderSearchParams): Promise<OrdersListResponse> {
-    await new Promise(r => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 700));
 
-    const allOrders = [...runtimeOrders, ...MOCK_ORDERS];
+    const allOrders = await this.loadFromStorage();
     let filtered = [...allOrders];
 
     // Filter by status
     if (params?.statusFilter && params.statusFilter !== 'all') {
-      filtered = filtered.filter(o => o.status === params.statusFilter);
+      filtered = filtered.filter((o) => o.status === params.statusFilter);
     }
 
     // Search by order ID
     if (params?.query?.trim()) {
       const q = params.query.toLowerCase().trim();
-      filtered = filtered.filter(o =>
+      filtered = filtered.filter((o) =>
         o.displayOrderId.toLowerCase().includes(q) ||
-        o.id.toLowerCase().includes(q),
+        o.id.toLowerCase().includes(q)
       );
     }
 
@@ -308,20 +341,20 @@ export const OrdersService = {
    * Get single order by ID
    */
   async getOrder(orderId: string): Promise<Order | null> {
-    await new Promise(r => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 500));
 
-    const allOrders = [...runtimeOrders, ...MOCK_ORDERS];
-    return allOrders.find(o => o.id === orderId || o.displayOrderId === orderId) || null;
+    const allOrders = await this.loadFromStorage();
+    return allOrders.find((o) => o.id === orderId || o.displayOrderId === orderId) || null;
   },
 
   /**
-   * Get recent orders for home screen preview (legacy support)
+   * Get recent orders for home screen preview
    */
   async getRecentOrders(): Promise<OrderPreview[]> {
-    await new Promise(resolve => setTimeout(resolve, 600));
-    const allOrders = [...runtimeOrders, ...MOCK_ORDERS];
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    const allOrders = await this.loadFromStorage();
     
-    return allOrders.slice(0, 3).map(order => {
+    return allOrders.slice(0, 3).map((order) => {
       const firstItem = order.items[0];
       const title = firstItem 
         ? (firstItem.type === 'product' ? firstItem.name : firstItem.fileName) 

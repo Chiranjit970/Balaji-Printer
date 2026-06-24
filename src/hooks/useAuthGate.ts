@@ -37,7 +37,7 @@ export function useAuthGate() {
   useEffect(() => {
     if (!isInitializing && minSplashDone && !initError) {
       if (isAuthenticated) {
-        router.replace('/(tabs)/print');
+        router.replace('/(tabs)');
       } else {
         router.replace('/(auth)/login');
       }

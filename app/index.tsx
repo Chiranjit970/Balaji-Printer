@@ -11,7 +11,7 @@ import ErrorView from '../src/components/common/ErrorView';
  * 2. Auth state initializes (token validation)
  * 3. Minimum splash duration elapses (1.5s branding)
  *
- * Then routes to /(tabs)/print or /(auth)/login based on session.
+ * Then routes to /(tabs) or /(auth)/login based on session.
  */
 export default function SplashIndex() {
   const { hasError, errorMessage, retry } = useAuthGate();

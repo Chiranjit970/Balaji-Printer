@@ -64,12 +64,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="print"
-        options={{
-          href: null,
-        }}
-      />
     </Tabs>
   );
 }

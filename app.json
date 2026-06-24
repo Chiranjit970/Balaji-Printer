@@ -22,8 +22,16 @@
       "intentFilters": [
         {
           "action": "VIEW",
-          "data": [{ "scheme": "balajiprinters", "host": "orders" }],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "data": [
+            {
+              "scheme": "balajiprinters",
+              "host": "orders"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -38,6 +46,13 @@
       "expo-secure-store",
       "expo-splash-screen",
       "expo-sharing"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7355668f-b864-4ef9-a71f-0f5547f67ea1"
+      }
+    },
+    "owner": "chiranslif"
   }
 }

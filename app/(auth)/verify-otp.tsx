@@ -89,7 +89,7 @@ export default function VerifyOTPScreen() {
             useAuthStore.getState().setRedirectAfterAuth(null);
             router.replace(redirectPath as any);
           } else {
-            router.replace('/(tabs)/print');
+            router.replace('/(tabs)');
           }
         },
         onError: (error) => {

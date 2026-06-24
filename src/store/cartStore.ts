@@ -1,4 +1,7 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '../constants/storage';
 import { CartItem, CartProductItem, CartPrintItem } from '../types/cart.types';
 
 interface CartStore {
@@ -49,93 +52,101 @@ const calculateCount = (items: CartItem[]): number => {
   }, 0);
 };
 
-export const useCartStore = create<CartStore>((set, get) => ({
-  items: [],
-  totalAmount: 0,
-  itemCount: 0,
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      totalAmount: 0,
+      itemCount: 0,
 
-  addProduct: (product) => {
-    const existingItem = get().items.find(
-      (item) => item.type === 'product' && item.productId === product.productId
-    ) as CartProductItem | undefined;
+      addProduct: (product) => {
+        const existingItem = get().items.find(
+          (item) => item.type === 'product' && item.productId === product.productId
+        ) as CartProductItem | undefined;
 
-    if (existingItem) {
-      get().updateProductQuantity(
-        existingItem.cartItemId,
-        existingItem.quantity + product.quantity
-      );
-      return;
-    }
-
-    const newItem: CartProductItem = {
-      cartItemId: `cart_product_${Date.now()}`,
-      type: 'product',
-      productId: product.productId,
-      name: product.name,
-      price: product.price,
-      quantity: product.quantity,
-      image: product.image,
-      addedAt: new Date().toISOString(),
-    };
-
-    set((state) => {
-      const updatedItems = [...state.items, newItem];
-      return {
-        items: updatedItems,
-        totalAmount: calculateTotal(updatedItems),
-        itemCount: calculateCount(updatedItems),
-      };
-    });
-  },
-
-  addPrintJob: (printJob) => {
-    const newItem: CartPrintItem = {
-      cartItemId: `cart_print_${Date.now()}`,
-      type: 'print',
-      fileName: printJob.fileName,
-      pageCount: printJob.pageCount,
-      copies: printJob.copies,
-      options: printJob.options,
-      price: printJob.price,
-      addedAt: new Date().toISOString(),
-    };
-
-    set((state) => {
-      const updatedItems = [...state.items, newItem];
-      return {
-        items: updatedItems,
-        totalAmount: calculateTotal(updatedItems),
-        itemCount: calculateCount(updatedItems),
-      };
-    });
-  },
-
-  updateProductQuantity: (cartItemId, quantity) => {
-    set((state) => {
-      const updatedItems = state.items.map((item) => {
-        if (item.cartItemId === cartItemId && item.type === 'product') {
-          return { ...item, quantity: Math.max(1, quantity) };
+        if (existingItem) {
+          get().updateProductQuantity(
+            existingItem.cartItemId,
+            existingItem.quantity + product.quantity
+          );
+          return;
         }
-        return item;
-      });
-      return {
-        items: updatedItems,
-        totalAmount: calculateTotal(updatedItems),
-        itemCount: calculateCount(updatedItems),
-      };
-    });
-  },
 
-  removeItem: (cartItemId) => {
-    set((state) => {
-      const updatedItems = state.items.filter((item) => item.cartItemId !== cartItemId);
-      return {
-        items: updatedItems,
-        totalAmount: calculateTotal(updatedItems),
-        itemCount: calculateCount(updatedItems),
-      };
-    });
-  },
+        const newItem: CartProductItem = {
+          cartItemId: `cart_product_${Date.now()}`,
+          type: 'product',
+          productId: product.productId,
+          name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          image: product.image,
+          addedAt: new Date().toISOString(),
+        };
 
-  clearCart: () => set({ items: [], totalAmount: 0, itemCount: 0 }),
-}));
+        set((state) => {
+          const updatedItems = [...state.items, newItem];
+          return {
+            items: updatedItems,
+            totalAmount: calculateTotal(updatedItems),
+            itemCount: calculateCount(updatedItems),
+          };
+        });
+      },
+
+      addPrintJob: (printJob) => {
+        const newItem: CartPrintItem = {
+          cartItemId: `cart_print_${Date.now()}`,
+          type: 'print',
+          fileName: printJob.fileName,
+          pageCount: printJob.pageCount,
+          copies: printJob.copies,
+          options: printJob.options,
+          price: printJob.price,
+          addedAt: new Date().toISOString(),
+        };
+
+        set((state) => {
+          const updatedItems = [...state.items, newItem];
+          return {
+            items: updatedItems,
+            totalAmount: calculateTotal(updatedItems),
+            itemCount: calculateCount(updatedItems),
+          };
+        });
+      },
+
+      updateProductQuantity: (cartItemId, quantity) => {
+        set((state) => {
+          const updatedItems = state.items.map((item) => {
+            if (item.cartItemId === cartItemId && item.type === 'product') {
+              return { ...item, quantity: Math.max(1, quantity) };
+            }
+            return item;
+          });
+          return {
+            items: updatedItems,
+            totalAmount: calculateTotal(updatedItems),
+            itemCount: calculateCount(updatedItems),
+          };
+        });
+      },
+
+      removeItem: (cartItemId) => {
+        set((state) => {
+          const updatedItems = state.items.filter((item) => item.cartItemId !== cartItemId);
+          return {
+            items: updatedItems,
+            totalAmount: calculateTotal(updatedItems),
+            itemCount: calculateCount(updatedItems),
+          };
+        });
+      },
+
+      clearCart: () => set({ items: [], totalAmount: 0, itemCount: 0 }),
+    }),
+    {
+      name: STORAGE_KEYS.cart,
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);

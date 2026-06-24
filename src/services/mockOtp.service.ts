@@ -110,7 +110,7 @@ export const MockOTPService = {
     otpSessions.delete(phone);
 
     const userId = `user_${Date.now()}`;
-    const token = `mock_token_${userId}_${Date.now()}`;
+    const token = `mock_token_${userId}_${phone}_${Date.now()}`;
     const user: User = {
       id: userId,
       phone,

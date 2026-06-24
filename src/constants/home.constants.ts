@@ -44,7 +44,7 @@ export const homeContent = {
       id: 'upload-print',
       icon: 'document-text-outline',
       label: 'Upload & Print',
-      route: '/(print)/upload',
+      route: '/(printing)/upload',
       color: colors.blue,
     },
     {

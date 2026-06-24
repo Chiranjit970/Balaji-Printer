@@ -1,3 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '../constants/storage';
+import { AddressService } from './address.service';
 import {
   Order,
   CreateOrderRequest,
@@ -10,8 +13,9 @@ import { CartItem } from '../types/cart.types';
 import { CHECKOUT_CONFIG } from '../constants/checkout.constants';
 
 const generateOrderId = (): string => {
-  const timestamp = Date.now().toString().slice(-8);
-  return `BP${timestamp}`;
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const randNum = Math.floor(1000 + Math.random() * 9000);
+  return `BP${dateStr}-${randNum}`;
 };
 
 const calculatePricing = (items: CartItem[]): OrderPricing => {
@@ -42,9 +46,6 @@ const calculatePricing = (items: CartItem[]): OrderPricing => {
   };
 };
 
-// In-memory order store
-const orders: Order[] = [];
-
 export const OrderService = {
   /**
    * Calculate order pricing from cart items
@@ -52,8 +53,32 @@ export const OrderService = {
   calculatePricing,
 
   /**
+   * Helper to load orders from storage
+   */
+  async loadOrders(): Promise<Order[]> {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.orders);
+      return data ? JSON.parse(data) : [];
+    } catch (e) {
+      console.error('[OrderService] Failed to load orders:', e);
+      return [];
+    }
+  },
+
+  /**
+   * Helper to save orders to storage
+   */
+  async saveOrders(ordersList: Order[]): Promise<void> {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(ordersList));
+    } catch (e) {
+      console.error('[OrderService] Failed to save orders:', e);
+      throw e;
+    }
+  },
+
+  /**
    * Create pending order before payment
-   * Future: POST /orders/checkout → returns razorpay_order_id
    */
   async createOrder(request: CreateOrderRequest): Promise<CreateOrderResponse> {
     await new Promise((r) => setTimeout(r, 800));
@@ -62,15 +87,17 @@ export const OrderService = {
     const orderId = `order_${Date.now()}`;
     const displayOrderId = generateOrderId();
 
-    // Mock razorpay order (future: real Razorpay API call on backend)
+    // Resolve address snapshot at order creation time
+    const addresses = await AddressService.getAddresses();
+    const deliveryAddress = addresses.find((a) => a.id === request.deliveryAddressId) || addresses[0] || {} as any;
+
     const mockRazorpayOrderId = `rzp_order_${Date.now()}`;
 
-    // Store pending order
     const pendingOrder: Order = {
       id: orderId,
       displayOrderId,
       items: request.items,
-      deliveryAddress: { id: request.deliveryAddressId } as any, // placeholder, resolved during confirm or review
+      deliveryAddress: { ...deliveryAddress }, // snapshot clone
       pricing,
       status: 'placed',
       paymentStatus: 'pending',
@@ -110,7 +137,9 @@ export const OrderService = {
       updatedAt: new Date().toISOString(),
     };
 
-    orders.push(pendingOrder);
+    const ordersList = await this.loadOrders();
+    ordersList.push(pendingOrder);
+    await this.saveOrders(ordersList);
 
     return {
       success: true,
@@ -122,29 +151,31 @@ export const OrderService = {
 
   /**
    * Confirm payment after Razorpay callback
-   * Future: POST /payments/confirm { order_id, razorpay_payment_id, signature }
    */
   async confirmPayment(request: PaymentConfirmRequest): Promise<PaymentConfirmResponse> {
     await new Promise((r) => setTimeout(r, 1200));
 
-    const order = orders.find((o) => o.id === request.orderId);
-    if (!order) return { success: false, error: 'Order not found' };
+    const ordersList = await this.loadOrders();
+    const index = ordersList.findIndex((o) => o.id === request.orderId);
+    if (index === -1) return { success: false, error: 'Order not found' };
 
-    // Update order
-    order.paymentStatus = 'paid';
-    order.status = 'placed';
-    order.razorpayPaymentId = request.razorpayPaymentId;
-    order.updatedAt = new Date().toISOString();
+    // Update order status and payment confirmations
+    ordersList[index].paymentStatus = 'paid';
+    ordersList[index].status = 'placed';
+    ordersList[index].razorpayPaymentId = request.razorpayPaymentId;
+    ordersList[index].updatedAt = new Date().toISOString();
 
-    return { success: true, order };
+    await this.saveOrders(ordersList);
+
+    return { success: true, order: ordersList[index] };
   },
 
   /**
    * Get order by ID
-   * Future: GET /orders/{id}
    */
   async getOrder(orderId: string): Promise<Order | null> {
     await new Promise((r) => setTimeout(r, 400));
-    return orders.find((o) => o.id === orderId) || null;
+    const ordersList = await this.loadOrders();
+    return ordersList.find((o) => o.id === orderId) || null;
   },
 };

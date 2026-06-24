@@ -53,7 +53,7 @@ export default function HomeScreen() {
       router.push('/(tabs)/store');
     } else if (route === '/(tabs)/orders') {
       router.push('/(tabs)/orders');
-    } else if (route === '/(tabs)/print' || route.includes('print')) {
+    } else if (route === '/(printing)/upload' || route.includes('print')) {
       router.push('/(printing)/upload');
     } else {
       Alert.alert(

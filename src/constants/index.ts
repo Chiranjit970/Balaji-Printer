@@ -7,3 +7,4 @@ export * from './store.constants';
 export * from './checkout.constants';
 export * from './orders.constants';
 export * from './profile.constants';
+export { STORAGE_KEYS } from './storage';

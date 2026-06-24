@@ -1,7 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { STORAGE_KEYS } from '../constants/storage';
 import { Address, AddressFormData } from '../types/address.types';
 
-// In-memory mock address store
-const addressStore: Address[] = [
+const DEFAULT_ADDRESSES: Address[] = [
   {
     id: 'addr-001',
     label: 'Home',
@@ -18,27 +19,54 @@ const addressStore: Address[] = [
   },
 ];
 
-let nextId = 2;
-
 export const AddressService = {
   /**
+   * Helper to load addresses from storage, with fallback to default seed
+   */
+  async loadFromStorage(): Promise<Address[]> {
+    try {
+      const data = await AsyncStorage.getItem(STORAGE_KEYS.addresses);
+      if (data) {
+        return JSON.parse(data);
+      }
+      // Seed default addresses on first load
+      await AsyncStorage.setItem(STORAGE_KEYS.addresses, JSON.stringify(DEFAULT_ADDRESSES));
+      return [...DEFAULT_ADDRESSES];
+    } catch (error) {
+      console.error('[AddressService] Failed to load addresses from storage:', error);
+      return [...DEFAULT_ADDRESSES];
+    }
+  },
+
+  /**
+   * Helper to save addresses list to storage
+   */
+  async saveToStorage(addresses: Address[]): Promise<void> {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.addresses, JSON.stringify(addresses));
+    } catch (error) {
+      console.error('[AddressService] Failed to save addresses to storage:', error);
+      throw error;
+    }
+  },
+
+  /**
    * Get all addresses for current user
-   * Future: GET /addresses
    */
   async getAddresses(): Promise<Address[]> {
-    await new Promise((r) => setTimeout(r, 500));
-    return [...addressStore];
+    await new Promise((r) => setTimeout(r, 400));
+    return this.loadFromStorage();
   },
 
   /**
    * Add new address
-   * Future: POST /addresses
    */
   async addAddress(data: AddressFormData): Promise<Address> {
-    await new Promise((r) => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 500));
+    const addresses = await this.loadFromStorage();
 
     const newAddress: Address = {
-      id: `addr-${nextId++}`,
+      id: `addr_${Date.now()}`,
       label: data.label || 'Home',
       name: data.name,
       phone: data.phone,
@@ -48,57 +76,67 @@ export const AddressService = {
       city: data.city,
       state: data.state,
       pincode: data.pincode,
-      isDefault: addressStore.length === 0,
+      isDefault: addresses.length === 0,
       createdAt: new Date().toISOString(),
     };
 
-    addressStore.push(newAddress);
+    addresses.push(newAddress);
+    await this.saveToStorage(addresses);
     return newAddress;
   },
 
   /**
    * Update existing address
-   * Future: PUT /addresses/{id}
    */
   async updateAddress(id: string, data: AddressFormData): Promise<Address> {
-    await new Promise((r) => setTimeout(r, 600));
+    await new Promise((r) => setTimeout(r, 500));
+    const addresses = await this.loadFromStorage();
 
-    const index = addressStore.findIndex((a) => a.id === id);
+    const index = addresses.findIndex((a) => a.id === id);
     if (index === -1) throw new Error('Address not found');
 
-    addressStore[index] = {
-      ...addressStore[index],
+    addresses[index] = {
+      ...addresses[index],
       ...data,
-      label: data.label || addressStore[index].label,
+      label: data.label || addresses[index].label,
     };
-    return addressStore[index];
+
+    await this.saveToStorage(addresses);
+    return addresses[index];
   },
 
   /**
    * Delete address
-   * Future: DELETE /addresses/{id}
    */
   async deleteAddress(id: string): Promise<void> {
     await new Promise((r) => setTimeout(r, 400));
-    const index = addressStore.findIndex((a) => a.id === id);
+    const addresses = await this.loadFromStorage();
+
+    const index = addresses.findIndex((a) => a.id === id);
     if (index !== -1) {
-      const wasDefault = addressStore[index].isDefault;
-      addressStore.splice(index, 1);
+      const wasDefault = addresses[index].isDefault;
+      addresses.splice(index, 1);
+      
       // If deleted default, make the first remaining address default
-      if (wasDefault && addressStore.length > 0) {
-        addressStore[0].isDefault = true;
+      if (wasDefault && addresses.length > 0) {
+        addresses[0].isDefault = true;
       }
+      
+      await this.saveToStorage(addresses);
     }
   },
 
   /**
    * Set default address
-   * Future: POST /addresses/{id}/set-default
    */
   async setDefault(id: string): Promise<void> {
     await new Promise((r) => setTimeout(r, 300));
-    addressStore.forEach((a) => {
+    const addresses = await this.loadFromStorage();
+    
+    addresses.forEach((a) => {
       a.isDefault = a.id === id;
     });
+
+    await this.saveToStorage(addresses);
   },
 };
